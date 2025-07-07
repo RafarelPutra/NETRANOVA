@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🐷</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .piggy {
+      font-size: 35vw;
+      animation: pigMock 1.8s infinite ease-in-out;
+    }
+
+    @keyframes pigMock {
+      0%   { transform: scale(1) rotate(0deg); }
+      20%  { transform: scale(1.15) rotate(-6deg); }
+      40%  { transform: scale(0.95) rotate(6deg); }
+      60%  { transform: scale(1.1) rotate(-4deg); }
+      80%  { transform: scale(1) rotate(4deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="piggy">🐸</div>
+</body>
+</html>
