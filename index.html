@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NETRANOVA Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Urbanist:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* Semua style tetap sama seperti sebelumnya */
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: 'Urbanist', sans-serif;
+      background: url('https://images.unsplash.com/photo-1571867424485-369464db1e2f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1050&q=80') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      backdrop-filter: brightness(0.5);
+    }
+    .login-container {
+      background-color: rgba(0, 0, 0, 0.75);
+      padding: 40px 20px 20px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 400px;
+      position: relative;
+      box-shadow: 0 0 15px rgba(255, 100, 100, 0.1);
+      color: white;
+    }
+    .login-container h2 {
+      text-align: center;
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(90deg, #ff4d4d, #ffffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 10px rgba(255, 100, 100, 0.6);
+      margin-bottom: 30px;
+    }
+    .form-wrapper { position: relative; z-index: 1; }
+    .input-group { margin-bottom: 20px; position: relative; }
+    .input-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background-color: #222;
+      color: white;
+      font-size: 16px;
+    }
+    .input-group input:focus { outline: 2px solid #ff4d4d; }
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      top: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+    .toggle-password svg {
+      width: 24px;
+      height: 24px;
+      stroke: url(#grad);
+      transition: opacity 0.3s ease;
+      opacity: 1;
+    }
+    .login-btn {
+      width: 100px;
+      padding: 10px;
+      background: linear-gradient(90deg, #ff4d4d, #ffffff);
+      color: black;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, 0);
+      transition: all 0.3s ease;
+      z-index: 2;
+    }
+    #error-message {
+      position: absolute;
+      top: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 77, 77, 0.9);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      z-index: 99;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.4s ease;
+      box-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
+    }
+    #error-message.show {
+      opacity: 1;
+      pointer-events: auto;
+      top: -30px;
+    }
+    .footer {
+      text-align: center;
+      font-size: 14px;
+      margin-top: 100px;
+      position: relative;
+      z-index: 1;
+    }
+    .footer a {
+      background: linear-gradient(90deg, #ff4d4d, #ffffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+    .otp-popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: brightness(0.3) blur(4px);
+      background-color: rgba(0, 0, 0, 0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+    .otp-box {
+      background: rgba(0, 0, 0, 0.85);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(255, 77, 77, 0.5);
+      text-align: center;
+      width: 300px;
+      color: white;
+    }
+    .otp-box h3 {
+      margin-bottom: 20px;
+      background: linear-gradient(90deg, #ff4d4d, #ffffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .otp-box input {
+      padding: 10px;
+      width: 100%;
+      border-radius: 8px;
+      border: none;
+      background: #222;
+      color: white;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    .otp-box input:focus {
+      outline: 2px solid #ff4d4d;
+    }
+    .otp-box button {
+      background: linear-gradient(90deg, #ff4d4d, #ffffff);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    .otp-error {
+      margin-top: 10px;
+      color: #ff8080;
+      font-size: 13px;
+    }
+    @media (max-width: 500px) {
+      .login-container {
+        padding: 30px 20px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div id="error-message"></div>
+    <h2>NETRANOVA</h2>
+    <div class="form-wrapper">
+      <form onsubmit="return validateForm(event)">
+        <div class="input-group">
+          <label for="email">Username</label>
+          <input type="text" id="email" placeholder="Name.ntnv" oninput="checkInput()" />
+        </div>
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="••••••••" oninput="checkInput()" />
+          <button class="toggle-password" onclick="togglePassword()" type="button" aria-label="Toggle password visibility">
+            <svg id="icon-eye" xmlns="http://www.w3.org/2000/svg"
+              width="24" height="24" viewBox="0 0 24 24"
+              fill="none" stroke="url(#grad)" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <defs>
+                <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#ff4d4d;" />
+                  <stop offset="100%" style="stop-color:#ffffff;" />
+                </linearGradient>
+              </defs>
+              <path d="M12 5C7 5 3 12 12 19C21 12 17 5 12 5Z" />
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M12 9 L13 11 L11 11 Z" fill="url(#grad)" />
+            </svg>
+          </button>
+        </div>
+      </form>
+    </div>
+    <button id="loginBtn" class="login-btn" onclick="validateForm(event)">Login</button>
+    <div class="footer" id="footer">
+      Belum punya akun? <a href="#">Kasian!!</a>
+    </div>
+  </div>
+
+  <!-- OTP Popup -->
+  <div class="otp-popup" id="otpPopup">
+    <div class="otp-box">
+      <h3>Masukkan Kode OTP</h3>
+      <h3>Jumlah huruf nama belakang kamu, dikali 2225 (nama belakang sesuai ktp)</h3>
+      <input type="text" id="otpInput" placeholder="Tanpa Titik" maxlength="100000000" />
+      <button onclick="validateOtp()">Verifikasi</button>
+      <p id="otpError" class="otp-error"></p>
+    </div>
+  </div>
+
+  <script>
+    const loginBtn = document.getElementById('loginBtn');
+    const container = document.querySelector('.login-container');
+    const inputPassword = document.getElementById('password');
+    const inputEmail = document.getElementById('email');
+    const footer = document.getElementById('footer');
+    const eyeIcon = document.getElementById('icon-eye');
+    const errorMessage = document.getElementById('error-message');
+    const otpPopup = document.getElementById('otpPopup');
+    const otpInput = document.getElementById('otpInput');
+    const otpError = document.getElementById('otpError');
+
+    let isLoginCentered = true;
+    let isPasswordShown = false;
+    let currentOtp = "";
+
+    const validUsers = [
+      { email: "Creespho.ntnv", password: "088100" },
+      { email: "Ahlun.ntnv", password: "0827185" },
+      { email: "Silvi.ntnv", password: "080086" },
+      { email: "Bilal.ntnv", password: "085423" },
+      { email: "Rizky.ntnv", password: "086680" }
+    ];
+
+    const userOtps = {
+      "Creespho.ntnv": "17800",
+      "Ahlun.ntnv": "11125",
+      "Silvi.ntnv": "11125",
+      "Bilal.ntnv": "20025",
+      "Rizky.ntnv": "17800"
+    };
+
+    function togglePassword() {
+      const passwordField = document.getElementById('password');
+      eyeIcon.style.opacity = 0;
+      setTimeout(() => {
+        isPasswordShown = !isPasswordShown;
+        passwordField.type = isPasswordShown ? 'text' : 'password';
+        const eyeShow = `<defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#ff4d4d;" />
+            <stop offset="100%" style="stop-color:#ffffff;" /></linearGradient></defs>
+            <path d="M12 5C7 5 3 12 12 19C21 12 17 5 12 5Z" />
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 9 L13 11 L11 11 Z" fill="url(#grad)" />`;
+        const eyeHide = `<defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#ff4d4d;" />
+            <stop offset="100%" style="stop-color:#ffffff;" /></linearGradient></defs>
+            <path d="M12 5C7 5 3 12 12 19C21 12 17 5 12 5Z" />
+            <line x1="4" y1="4" x2="20" y2="20" />
+            <line x1="4" y1="20" x2="20" y2="4" />
+            <circle cx="12" cy="12" r="2" fill="url(#grad)" />`;
+        eyeIcon.innerHTML = isPasswordShown ? eyeHide : eyeShow;
+        eyeIcon.style.opacity = 1;
+      }, 200);
+    }
+
+    function setLoginBtnToMiddle() {
+      const passwordBottom = inputPassword.getBoundingClientRect().bottom;
+      const footerTop = footer.getBoundingClientRect().top;
+      const containerTop = container.getBoundingClientRect().top;
+      const middleY = ((passwordBottom + footerTop) / 2) - containerTop;
+      loginBtn.style.top = `${middleY - loginBtn.offsetHeight / 2}px`;
+      loginBtn.style.left = "50%";
+      loginBtn.style.transform = "translate(-50%, 0)";
+      isLoginCentered = true;
+    }
+
+    function checkInput() {
+      const email = inputEmail.value.trim();
+      const password = inputPassword.value.trim();
+      if (email.length >= 3 && password.length >= 3 && !isLoginCentered) {
+        setLoginBtnToMiddle();
+      }
+    }
+
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.classList.add("show");
+      setTimeout(hideError, 3000);
+    }
+
+    function hideError() {
+      errorMessage.classList.remove("show");
+    }
+
+    function validateForm(e) {
+      e.preventDefault();
+      const email = inputEmail.value.trim();
+      const password = inputPassword.value.trim();
+      hideError();
+      if (email.length < 3 || password.length < 3) {
+        shakeLoginBtn();
+        showError("Isi username dan password terlebih dahulu!");
+        return false;
+      }
+      const foundUser = validUsers.find(user => user.email === email && user.password === password);
+      if (foundUser) {
+        currentOtp = userOtps[foundUser.email];
+        showOtpPopup();
+      } else {
+        showError("Username atau password salah!");
+      }
+      return false;
+    }
+
+    function showOtpPopup() {
+      otpPopup.style.display = "flex";
+      otpInput.value = "";
+      otpError.textContent = "";
+      otpInput.focus();
+    }
+
+    function validateOtp() {
+      const enteredOtp = otpInput.value.trim();
+      const email = inputEmail.value.trim();
+      if (enteredOtp === currentOtp) {
+        otpPopup.style.display = "none";
+        if (email === "Creespho.ntnv") {
+          window.location.href = "Creespho.html";
+        } else if (email === "Ahlun.ntnv") {
+          window.location.href = "Ahlun.html";
+        } else if (email === "Silvi.ntnv") {
+          window.location.href = "Silvi.html";
+        } else if (email === "Bilal.ntnv") {
+          window.location.href = "Bilal.html";
+        } else if (email === "Rizky.ntnv") {
+          window.location.href = "Rizky.html";
+        }
+      } else {
+        otpError.textContent = "Tidak tau menghitung!!";
+      }
+    }
+
+    function shakeLoginBtn() {
+      const containerWidth = container.clientWidth;
+      const btnWidth = loginBtn.offsetWidth;
+      const centerLeft = (containerWidth / 2) - (btnWidth / 2);
+      const direction = Math.random() < 0.5 ? 'left' : 'right';
+      const offset = Math.floor(Math.random() * 60) + 20;
+      let newLeft = direction === 'left'
+        ? Math.max(20, centerLeft - offset)
+        : Math.min(containerWidth - btnWidth - 20, centerLeft + offset);
+      loginBtn.style.left = `${newLeft}px`;
+      loginBtn.style.transform = "translate(0, 0)";
+      isLoginCentered = false;
+    }
+
+    window.onload = () => setLoginBtnToMiddle();
+    window.onresize = () => { if (isLoginCentered) setLoginBtnToMiddle(); };
+  </script>
+</body>
+              </html>
